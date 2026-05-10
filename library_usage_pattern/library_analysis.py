@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 # =========================
 # GOOGLE SHEET
@@ -14,6 +15,9 @@ url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid=
 # =========================
 data = pd.read_csv(url)
 data.columns = data.columns.str.strip()
+
+# Create reports folder
+os.makedirs("reports", exist_ok=True)
 
 # =========================
 # PRINT RESPONSE DATA
@@ -85,7 +89,7 @@ plt.style.use('ggplot')
 # =========================
 # BAR CHART FUNCTION
 # =========================
-def plot_bar(data_counts, title, xlabel, ylabel):
+def plot_bar(data_counts, title, xlabel, ylabel, filename):
 
     plt.figure(figsize=(8,5))
 
@@ -108,6 +112,10 @@ def plot_bar(data_counts, title, xlabel, ylabel):
 
     plt.tight_layout()
 
+    # SAVE GRAPH
+    plt.savefig(f"reports/{filename}")
+
+    # SHOW GRAPH
     plt.show()
 
 # =========================
@@ -119,7 +127,8 @@ plot_bar(
     dept_counts,
     "Department-wise Library Usage",
     "Department",
-    "Number of Students"
+    "Number of Students",
+    "department_chart.png"
 )
 
 # Book category chart
@@ -127,7 +136,8 @@ plot_bar(
     book_counts,
     "Book Category Popularity",
     "Category",
-    "Count"
+    "Count",
+    "book_category_chart.png"
 )
 
 # Pie chart
@@ -147,8 +157,10 @@ if not purpose_counts.empty:
 
     plt.tight_layout()
 
-    plt.show()
+# SAVE PIE CHART
+    plt.savefig("reports/purpose_pie_chart.png")
 
+    plt.show()
 else:
 
     print("No data available for pie chart")
